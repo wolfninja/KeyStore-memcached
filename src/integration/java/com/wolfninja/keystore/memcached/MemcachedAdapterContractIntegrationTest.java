@@ -10,9 +10,9 @@ import net.spy.memcached.MemcachedClient;
 import com.wolfninja.keystore.api.BaseKeyValueStoreAdapterTest;
 
 @Test
-public class MemcachedAdapterContractTest extends BaseKeyValueStoreAdapterTest {
+public class MemcachedAdapterContractIntegrationTest extends BaseKeyValueStoreAdapterTest {
 
-	public MemcachedAdapterContractTest() throws IOException {
+	public MemcachedAdapterContractIntegrationTest() throws IOException {
 		super(new MemcachedAdapter(new MemcachedClient(new InetSocketAddress("localhost", 11211))));
 	}
 }
