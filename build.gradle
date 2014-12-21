@@ -29,21 +29,34 @@ dependencies {
 }
 
 sourceSets {
-	integTest {
-		compileClasspath += main.output + test.output
-		runtimeClasspath += main.output + test.output
+	integration {
+		java {
+			srcDir 'src/integration/java'
+		}
+		resources {
+			srcDir 'src/integration/resources'
+		}
+		compileClasspath += sourceSets.test.runtimeClasspath
 	}
 }
 
-configurations {
-	integTestCompile.extendsFrom testCompile
-	integTestRuntime.extendsFrom testRuntime
+
+task integrationTest(type: Test) {
+	description = "Run integration tests (from src/integration)"
+	testClassesDir = sourceSets.integration.output.classesDir
+	classpath += sourceSets.integration.runtimeClasspath
+	reports.html.enabled = false
 }
 
-task integTest(type: Test) {
-	testClassesDir = sourceSets.integTest.output.classesDir
-	classpath = sourceSets.integTest.runtimeClasspath
+task integrationTestReport(type: TestReport) {
+	destinationDir = file("$buildDir/reports/integrationTest")
+	reportOn integrationTest.binResultsDir
 }
+integrationTestReport.shouldRunAfter integrationTest
+integrationTest.finalizedBy integrationTestReport
+
+integrationTest.useTestNG()
+test.useTestNG()
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
 	classifier = 'javadoc'
@@ -54,9 +67,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 	classifier = 'sources'
 	from sourceSets.main.allSource
 }
-
-test.useTestNG()
-integTest.useTestNG()
 
 artifacts {
 	archives jar
