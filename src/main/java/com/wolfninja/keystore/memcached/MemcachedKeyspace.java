@@ -59,10 +59,18 @@ public class MemcachedKeyspace implements Keyspace {
 	}
 
 	@Override
-	public Optional<KeyValue> get(final String key) {
+	public Optional<String> get(final String key) {
 		Preconditions.checkNotNull(key, "Key should be provided");
 
-		String builtKey = key(key);
+		final String value = (String) memcachedClient.get(key(key));
+		return Optional.fromNullable(value);
+	}
+
+	@Override
+	public Optional<KeyValue> gets(final String key) {
+		Preconditions.checkNotNull(key, "Key should be provided");
+
+		final String builtKey = key(key);
 		final CASValue<Object> value = memcachedClient.gets(builtKey);
 		final KeyValue keyValue = (value == null) ? null : KeyValue.create(key, value.getValue().toString(),
 				value.getCas());
