@@ -59,6 +59,17 @@ public class MemcachedKeyspace implements Keyspace {
 	}
 
 	@Override
+	public boolean deletes(final String key, final long version) {
+		Preconditions.checkNotNull(key, "Key should be provided");
+		try {
+			// XXX this requires the binary protocol to be used, ascii throws exception
+			return memcachedClient.delete(key(key), version).get();
+		} catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public Optional<String> get(final String key) {
 		Preconditions.checkNotNull(key, "Key should be provided");
 
