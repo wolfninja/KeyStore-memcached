@@ -1,12 +1,17 @@
 package com.wolfninja.keystore.memcached;
 
-import net.spy.memcached.MemcachedClient;
+import java.util.Objects;
 
-import com.google.common.base.Preconditions;
 import com.wolfninja.keystore.api.KeyValueStoreAdapter;
 import com.wolfninja.keystore.api.Keyspace;
 
+import net.spy.memcached.MemcachedClient;
+
 public class MemcachedAdapter implements KeyValueStoreAdapter {
+
+	public static MemcachedAdapter create(final MemcachedClient client) {
+		return new MemcachedAdapter(client);
+	}
 
 	private final MemcachedClient memcachedClient;
 
@@ -16,7 +21,7 @@ public class MemcachedAdapter implements KeyValueStoreAdapter {
 
 	@Override
 	public Keyspace getKeyspace(final String keyspaceName) {
-		Preconditions.checkNotNull(keyspaceName, "KeyspaceName must not be null");
+		Objects.requireNonNull(keyspaceName, "KeyspaceName must not be null");
 		return new MemcachedKeyspace(keyspaceName, memcachedClient);
 	}
 
