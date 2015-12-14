@@ -2,7 +2,7 @@
 .gradle/
 .classpath
 .project
-.orig
+*.orig
 .settings/
 Main.java
 bin/
