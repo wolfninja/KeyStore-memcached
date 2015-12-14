@@ -11,6 +11,9 @@ import net.spy.memcached.CASResponse;
 import net.spy.memcached.CASValue;
 import net.spy.memcached.MemcachedClient;
 
+/**
+ * @since 0.1
+ */
 public class MemcachedKeyspace implements Keyspace {
 
 	private String keyspaceName;
